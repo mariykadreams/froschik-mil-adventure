@@ -51,6 +51,18 @@ body {
   background: var(--scene-darkest);
   overflow: hidden;
   -webkit-font-smoothing: none;
+  cursor: url("/assets/book/cursor-default.png") 2 0, auto;
+}
+
+button:not(:disabled),
+a,
+[role="button"] {
+  cursor: url("/assets/book/cursor-default.png") 2 0, pointer;
+}
+
+button:not(:disabled):active,
+a:active {
+  cursor: url("/assets/book/cursor-click.png") 8 8, pointer;
 }
 
 button {
