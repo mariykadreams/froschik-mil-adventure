@@ -1,0 +1,58 @@
+.settings-screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--scene-darkest);
+  border: 10px solid var(--wood-darkest);
+  box-shadow:
+    inset 0 0 0 4px var(--gold),
+    inset 0 0 0 8px var(--wood-mid);
+}
+
+.settings-panel {
+  width: min(480px, 90vw);
+  background: var(--wood-dark);
+  padding: 2.5rem;
+  box-shadow:
+    inset 4px 4px 0 var(--wood-light),
+    inset -4px -4px 0 var(--wood-darkest),
+    0 0 0 4px var(--wood-darkest);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.settings-title {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  color: var(--gold-bright);
+  margin: 0;
+  text-align: center;
+  text-shadow: 2px 2px 0 var(--wood-darkest);
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.settings-row label {
+  font-family: var(--font-ui);
+  color: var(--parchment);
+  letter-spacing: 1px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.settings-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--gold);
+}
+
+.settings-panel .pixel-btn {
+  margin-top: 0.5rem;
+  align-self: center;
+}

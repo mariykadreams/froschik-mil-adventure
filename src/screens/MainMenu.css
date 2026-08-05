@@ -1,0 +1,105 @@
+.menu-screen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 10px solid var(--wood-darkest);
+  box-shadow:
+    inset 0 0 0 4px var(--gold),
+    inset 0 0 0 8px var(--wood-mid);
+}
+
+.pixel-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.menu-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12) 0,
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse at center, transparent 25%, rgba(15, 46, 26, 0.85) 100%);
+}
+
+.menu-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(2rem, 6vh, 4rem);
+  text-align: center;
+  padding: 2rem;
+}
+
+.menu-title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menu-title {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  line-height: 1;
+  margin: 0;
+  letter-spacing: 2px;
+  color: var(--gold-bright);
+  text-shadow:
+    3px 0 0 var(--wood-darkest),
+    -3px 0 0 var(--wood-darkest),
+    0 3px 0 var(--wood-darkest),
+    0 -3px 0 var(--wood-darkest),
+    4px 4px 0 var(--wood-darkest),
+    8px 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.menu-subtitle {
+  font-family: var(--font-ui);
+  font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--parchment);
+  margin: 0;
+  text-shadow: 2px 2px 0 var(--wood-darkest);
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.menu-footer {
+  position: absolute;
+  z-index: 2;
+  bottom: 1.5rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--scene-lightest);
+  opacity: 0.7;
+}

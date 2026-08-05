@@ -1,0 +1,122 @@
+:root {
+  /* Game Boy-inspired forest palette (scene) */
+  --scene-darkest: #0f2e1a;
+  --scene-dark: #1f4d2b;
+  --scene-mid: #3f7a44;
+  --scene-light: #79b06b;
+  --scene-lightest: #cfe8b8;
+
+  /* Carved wood / parchment palette (UI chrome) */
+  --wood-darkest: #2b1c14;
+  --wood-dark: #4a3323;
+  --wood-mid: #6f4a2f;
+  --wood-light: #a9713f;
+  --gold: #e8b552;
+  --gold-bright: #f6d98a;
+  --parchment: #f1e2bd;
+
+  --font-title: "Jacquard 12", "Silkscreen", monospace;
+  --font-ui: "Silkscreen", monospace;
+
+  /* Library interior */
+  --library-wall-dark: #241611;
+  --library-wall-mid: #33200f;
+  --library-glow: rgba(232, 181, 82, 0.16);
+
+  /* MIL topic accents (shelf/book theming) */
+  --topic-disinfo: #7a2b28;
+  --topic-disinfo-light: #a8433c;
+  --topic-ai-safety: #235a68;
+  --topic-ai-safety-light: #367f92;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--scene-darkest);
+  overflow: hidden;
+  -webkit-font-smoothing: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.pixel-btn {
+  font-family: var(--font-ui);
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--parchment);
+  background: var(--wood-mid);
+  border: none;
+  min-width: 220px;
+  padding: 0.9em 2.2em;
+  cursor: pointer;
+  box-shadow:
+    inset 4px 4px 0 var(--wood-light),
+    inset -4px -4px 0 var(--wood-darkest),
+    0 0 0 4px var(--wood-darkest),
+    0 6px 0 var(--wood-darkest);
+  transition:
+    transform 0.08s steps(2),
+    box-shadow 0.08s steps(2),
+    color 0.08s steps(2),
+    background 0.08s steps(2);
+}
+
+.pixel-btn:hover {
+  background: var(--wood-light);
+  color: var(--gold-bright);
+  transform: translateY(-3px);
+}
+
+.pixel-btn:active {
+  transform: translateY(4px);
+  box-shadow:
+    inset 4px 4px 0 var(--wood-dark),
+    inset -4px -4px 0 var(--wood-darkest),
+    0 0 0 4px var(--wood-darkest),
+    0 2px 0 var(--wood-darkest);
+}
+
+.pixel-btn:focus-visible {
+  outline: 3px dashed var(--gold);
+  outline-offset: 4px;
+}
+
+.pixel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 8%, var(--library-glow), transparent 42%),
+    radial-gradient(circle at 82% 12%, var(--library-glow), transparent 42%),
+    repeating-linear-gradient(
+      90deg,
+      var(--library-wall-mid) 0,
+      var(--library-wall-mid) 40px,
+      var(--library-wall-dark) 40px,
+      var(--library-wall-dark) 80px
+    );
+}
