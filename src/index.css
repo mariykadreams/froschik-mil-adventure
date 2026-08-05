@@ -26,8 +26,10 @@
   /* MIL topic accents (shelf/book theming) */
   --topic-disinfo: #7a2b28;
   --topic-disinfo-light: #a8433c;
+  --topic-disinfo-dark: #3a1210;
   --topic-ai-safety: #235a68;
   --topic-ai-safety-light: #367f92;
+  --topic-ai-safety-dark: #102a32;
 
   color-scheme: dark;
 }

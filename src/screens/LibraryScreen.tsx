@@ -22,7 +22,7 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
   const focusedBook = books[focusIndex];
 
   const goTo = (index: number) => {
-    setFocusIndex(Math.max(0, Math.min(books.length - 1, index)));
+    setFocusIndex(((index % books.length) + books.length) % books.length);
   };
 
   useEffect(() => {
@@ -69,7 +69,6 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
           <button
             className="carousel-arrow carousel-arrow--prev"
             onClick={() => goTo(focusIndex - 1)}
-            disabled={focusIndex === 0}
             aria-label="Previous book"
           >
             <img src="/assets/book/arrow.png" className="pixelated arrow-icon arrow-icon--prev" alt="" />
@@ -95,7 +94,6 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
           <button
             className="carousel-arrow carousel-arrow--next"
             onClick={() => goTo(focusIndex + 1)}
-            disabled={focusIndex === books.length - 1}
             aria-label="Next book"
           >
             <img src="/assets/book/arrow.png" className="pixelated arrow-icon" alt="" />
