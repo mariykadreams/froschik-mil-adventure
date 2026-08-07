@@ -4,6 +4,8 @@ import SettingsScreen from "./screens/SettingsScreen";
 import LibraryScreen from "./screens/LibraryScreen";
 import ChaptersScreen from "./screens/ChaptersScreen";
 import PlayPlaceholder from "./screens/PlayPlaceholder";
+import ChapterPlayer from "./game/ChapterPlayer";
+import { CHAPTER1_START, chapter1Beats } from "./data/chapter1";
 import type { Book, Chapter } from "./data/library";
 
 type Screen = "menu" | "settings" | "library" | "chapters" | "play";
@@ -47,6 +49,17 @@ function App() {
       );
 
     case "play":
+      if (activeChapter?.id === "kingdom_1_mavka") {
+        return (
+          <ChapterPlayer
+            beats={chapter1Beats}
+            startId={CHAPTER1_START}
+            chapterTitle={activeChapter.title}
+            onExit={() => setScreen("chapters")}
+            onComplete={() => setScreen("chapters")}
+          />
+        );
+      }
       return <PlayPlaceholder chapter={activeChapter} onBack={() => setScreen("chapters")} />;
 
     default:

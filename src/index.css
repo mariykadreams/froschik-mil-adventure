@@ -17,6 +17,7 @@
 
   --font-title: "Jacquard 12", "Silkscreen", monospace;
   --font-ui: "Silkscreen", monospace;
+  --font-body: "IM Fell English", Georgia, serif;
 
   /* Library interior */
   --library-wall-dark: #241611;
