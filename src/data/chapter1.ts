@@ -36,6 +36,8 @@ export type CutsceneBeat = {
   type: "cutscene";
   id: SceneId;
   location?: string;
+  background?: string;
+  portrait?: string;
   lines: DialogueLine[];
   next: SceneId;
 };
@@ -44,6 +46,8 @@ export type HubBeat = {
   type: "hub";
   id: SceneId;
   location?: string;
+  background?: string;
+  portrait?: string;
   speaker: string;
   intro: DialogueLine[];
   questions: Question[];
@@ -54,6 +58,7 @@ export type EchoTutorialBeat = {
   type: "echo-tutorial";
   id: SceneId;
   location?: string;
+  background?: string;
   intro: DialogueLine[];
   next: SceneId;
 };
@@ -68,6 +73,7 @@ export type TrackerCard = {
 export type TrackerBeat = {
   type: "tracker";
   id: SceneId;
+  background?: string;
   intro: DialogueLine[];
   cards: TrackerCard[];
   correctOrder: string[];
@@ -78,6 +84,8 @@ export type TrackerBeat = {
 export type DebriefBeat = {
   type: "debrief";
   id: SceneId;
+  background?: string;
+  portrait?: string;
   lines: DialogueLine[];
   lessonTitle: string;
   lessonText: string;
@@ -87,11 +95,34 @@ export type Beat = CutsceneBeat | HubBeat | EchoTutorialBeat | TrackerBeat | Deb
 
 export const CHAPTER1_START: SceneId = "s0_road";
 
+const BG = {
+  village1: "/images/bg/village-1.png",
+  village2: "/images/bg/village-2.png",
+  village3: "/images/bg/village-3.png",
+  hollow1: "/images/bg/hollow-1.png",
+  hollow2: "/images/bg/hollow-2.png",
+  river1: "/images/bg/river-1.png",
+  river2: "/images/bg/river-2.png",
+  treeClearing: "/images/bg/tree-clearing.png",
+};
+
+const PORTRAIT = {
+  yarema: "/images/characters/yarema.png",
+  ostap: "/images/characters/ostap.png",
+  mavka: "/images/characters/mavka.png",
+  rusalka1: "/images/characters/rusalka-1.png",
+  rusalka2: "/images/characters/rusalka-2.png",
+  sukhostiy: "/images/characters/sukhostiy.png",
+};
+
+export const FROSKO_PORTRAIT = "/images/characters/frosko.png";
+
 export const chapter1Beats: Record<SceneId, Beat> = {
   s0_road: {
     type: "cutscene",
     id: "s0_road",
     location: "The Road to Verbivka",
+    background: BG.village1,
     lines: [
       "The road runs through forest at dusk. A wooden sign leans at the treeline: VERBIVKA — 1 mile.",
       "Somewhere in the trees, singing rises — and breaks, mid-note, into a keening cry.",
@@ -104,6 +135,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s1_village",
     location: "Verbivka, at the gate",
+    background: BG.village1,
+    portrait: PORTRAIT.yarema,
     speaker: "Yarema",
     intro: [
       "Every village Frosko has walked leans toward its forest — for wood, for berries, for shade. This one has turned its back on the trees.",
@@ -161,6 +194,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s2_ostap",
     location: "Ostap's woodpile",
+    background: BG.village2,
+    portrait: PORTRAIT.ostap,
     speaker: "Ostap",
     intro: [
       "Ostap sits alone on a woodpile, neighbors turning away as they pass. He's about Frosko's age. He looks sad, not guilty.",
@@ -208,6 +243,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "echo-tutorial",
     id: "s3_hollow",
     location: "The Treeline & the Hollow",
+    background: BG.hollow1,
     intro: [
       "Past the gate, the keening resolves into words — layered, overlapping, dozens of voices at once: \"...they mean to burn us all... they mean to burn us all...\"",
       "It's coming from a natural amphitheater deeper in, a clearing where sound behaves strangely.",
@@ -220,6 +256,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s4_lisovyk",
     location: "The bent pine",
+    background: BG.hollow2,
     speaker: "The Lisovyk",
     intro: [
       "A grumpy, moss-bearded shape resolves out of the bark of a bent pine.",
@@ -265,6 +302,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s4_rusalka1",
     location: "The riverbank",
+    background: BG.river1,
+    portrait: PORTRAIT.rusalka1,
     speaker: "Rusalka",
     intro: [
       {
@@ -308,6 +347,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s4_rusalka2",
     location: "Further downstream",
+    background: BG.river2,
+    portrait: PORTRAIT.rusalka2,
     speaker: "Rusalka (downstream)",
     intro: [
       {
@@ -351,6 +392,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s4_birdspirit",
     location: "The roost, closest to Mavka",
+    background: BG.hollow1,
     speaker: "The Bird-Spirit",
     intro: [
       {
@@ -394,6 +436,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "cutscene",
     id: "s5_mavka_early",
     location: "The Hollow",
+    background: BG.hollow2,
+    portrait: PORTRAIT.mavka,
     lines: [
       "Four voices, and every one of them traces back to Mavka. Frosko goes to her directly.",
       {
@@ -409,6 +453,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s6_crosscheck",
     location: "Verbivka, back at the gate",
+    background: BG.village3,
+    portrait: PORTRAIT.yarema,
     speaker: "Yarema",
     intro: ["Yarema looks up as Frosko returns from the treeline."],
     questions: [
@@ -434,6 +480,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
   s7_tracker: {
     type: "tracker",
     id: "s7_tracker",
+    background: BG.hollow1,
     intro: [
       "In the Hollow, Frosko lays out everything he's heard and drags each account into the order it was actually told.",
     ],
@@ -459,6 +506,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "hub",
     id: "s8_sukhostiy",
     location: "The scarred clearing",
+    background: BG.treeClearing,
+    portrait: PORTRAIT.sukhostiy,
     speaker: "Sukhostiy",
     intro: [
       "The two scarred accounts lead to a clearing apart from the rest of the wood, where one tree stands alone — half its limbs long since gone bare and brittle, the bark split and weeping old sap.",
@@ -506,6 +555,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     type: "cutscene",
     id: "s9_gathering",
     location: "The Hollow",
+    background: BG.hollow2,
+    portrait: PORTRAIT.mavka,
     lines: [
       "Back in the Hollow, Frosko lays out the completed chain for Mavka. She is silent, then asks to see it again, slower.",
       {
@@ -521,6 +572,8 @@ export const chapter1Beats: Record<SceneId, Beat> = {
   s10_resolution: {
     type: "debrief",
     id: "s10_resolution",
+    background: BG.village1,
+    portrait: PORTRAIT.mavka,
     lines: [
       "Mavka and Yarema reopen the treeline together. Ostap explains the stolen woodpile aloud, and helps replant the cut branches. The keening fades back into song.",
       "Yarema promises something new, too: storm-broken and stolen branches will be cleared with care from now on, not torn. Sukhostiy, still scarred but no longer alone in it, lets the first green shoot in a long while push through his bark.",

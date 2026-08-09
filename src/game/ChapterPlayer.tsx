@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
+import { FROSKO_PORTRAIT } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
 import "./ChapterPlayer.css";
 
@@ -166,9 +167,19 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
     }
   };
 
+  const npcPortrait = "portrait" in beat ? beat.portrait : undefined;
+
   return (
     <div className="chapter-play-screen">
-      <div className="pixel-backdrop" />
+      <div
+        className="scene-background pixelated"
+        style={beat.background ? { backgroundImage: `url(${beat.background})` } : undefined}
+      />
+      <div className="scene-vignette" />
+
+      {npcPortrait && <img key={npcPortrait} src={npcPortrait} className="npc-portrait pixelated" alt="" />}
+
+      <img src={FROSKO_PORTRAIT} className="frosko-portrait pixelated" alt="Frosko" />
 
       <button className="chapter-back-arrow" onClick={onExit} aria-label="Leave chapter">
         <img src="/assets/book/arrow.png" className="pixelated back-arrow-icon" alt="" />

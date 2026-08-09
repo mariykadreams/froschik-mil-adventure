@@ -14,7 +14,7 @@ export default function MainMenu({ onPlay, onSettings }: MainMenuProps) {
 
       <div className="menu-content">
         <div className="menu-title-block">
-          <h1 className="menu-title">Froschik</h1>
+          <img src="/images/logo.png" className="menu-logo pixelated" alt="Frosko's Stories" />
           <p className="menu-subtitle">MIL Adventure</p>
         </div>
 
