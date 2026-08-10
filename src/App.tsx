@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MainMenu from "./screens/MainMenu";
 import SettingsScreen from "./screens/SettingsScreen";
 import LibraryScreen from "./screens/LibraryScreen";
@@ -7,6 +7,7 @@ import PlayPlaceholder from "./screens/PlayPlaceholder";
 import ChapterPlayer from "./game/ChapterPlayer";
 import { CHAPTER1_START, chapter1Beats } from "./data/chapter1";
 import type { Book, Chapter } from "./data/library";
+import { playClick } from "./audio/sfx";
 
 type Screen = "menu" | "settings" | "library" | "chapters" | "play";
 
@@ -14,6 +15,18 @@ function App() {
   const [screen, setScreen] = useState<Screen>("menu");
   const [activeBook, setActiveBook] = useState<Book | null>(null);
   const [activeChapter, setActiveChapter] = useState<Chapter | null>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const interactive = target?.closest("button, a, [role='button']");
+      if (!interactive) return;
+      if (interactive instanceof HTMLButtonElement && interactive.disabled) return;
+      playClick();
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
 
   switch (screen) {
     case "settings":

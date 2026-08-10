@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
-import { FROSKO_PORTRAIT } from "../data/chapter1";
+import { FROSKO_PORTRAIT, getPortraitBlink } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
 import "./ChapterPlayer.css";
 
@@ -168,6 +168,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   };
 
   const npcPortrait = "portrait" in beat ? beat.portrait : undefined;
+  const npcPortraitBlink = getPortraitBlink(npcPortrait);
 
   return (
     <div className="chapter-play-screen">
@@ -177,7 +178,14 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
       />
       <div className="scene-vignette" />
 
-      {npcPortrait && <img key={npcPortrait} src={npcPortrait} className="npc-portrait pixelated" alt="" />}
+      {npcPortrait && (
+        <div key={npcPortrait} className="npc-portrait-wrap">
+          <img src={npcPortrait} className="npc-portrait pixelated" alt="" />
+          {npcPortraitBlink && (
+            <img src={npcPortraitBlink} className="npc-portrait npc-portrait-blink pixelated" alt="" />
+          )}
+        </div>
+      )}
 
       <img src={FROSKO_PORTRAIT} className="frosko-portrait pixelated" alt="Frosko" />
 

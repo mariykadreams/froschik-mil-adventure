@@ -14,6 +14,7 @@ dist-ssr
 
 # Raw source art (see public/images/ for the optimized, renamed copies actually used by the app)
 /images
+*.zip
 
 # Editor directories and files
 .vscode/*

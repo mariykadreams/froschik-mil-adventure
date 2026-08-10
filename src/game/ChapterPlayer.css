@@ -32,19 +32,29 @@
     radial-gradient(ellipse at center, transparent 40%, rgba(15, 10, 6, 0.35) 100%);
 }
 
-.npc-portrait {
+.npc-portrait-wrap {
   position: fixed;
-  right: 1vw;
+  right: 0;
   bottom: 0;
   z-index: 2;
-  height: 56vh;
-  max-width: 36vw;
-  width: auto;
-  object-fit: contain;
-  object-position: bottom;
+  display: grid;
   pointer-events: none;
   filter: drop-shadow(0 14px 16px rgba(0, 0, 0, 0.55));
   animation: portrait-rise 0.35s ease-out;
+}
+
+.npc-portrait {
+  grid-area: 1 / 1;
+  height: 74vh;
+  max-width: 42vw;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
+}
+
+.npc-portrait-blink {
+  opacity: 0;
+  animation: portrait-blink 4.6s ease-in-out infinite;
 }
 
 @keyframes portrait-rise {
@@ -58,37 +68,54 @@
   }
 }
 
+@keyframes portrait-blink {
+  0%,
+  92%,
+  100% {
+    opacity: 0;
+  }
+  95%,
+  97% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .npc-portrait-blink {
+    animation: none;
+  }
+}
+
 @media (max-width: 1150px) {
   .npc-portrait {
-    height: 38vh;
+    height: 50vh;
     opacity: 0.92;
   }
 }
 
 @media (max-width: 760px) {
-  .npc-portrait {
+  .npc-portrait-wrap {
     display: none;
   }
 }
 
 .frosko-portrait {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 0;
+  left: 0;
   z-index: 3;
-  width: 82px;
-  height: 82px;
-  object-fit: cover;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
+  height: 42vh;
+  max-width: 32vw;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
   pointer-events: none;
 }
 
 @media (max-width: 760px) {
   .frosko-portrait {
-    width: 56px;
-    height: 56px;
-    bottom: 12px;
-    left: 12px;
+    height: 26vh;
   }
 }
 
@@ -335,7 +362,7 @@
 
 .story-line {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   line-height: 1.6;
   color: var(--wood-darkest);
   margin: 0;
@@ -488,6 +515,40 @@
   justify-content: center;
 }
 
+.chapter-actions--choices {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.6rem;
+}
+
+.chapter-actions .choice-btn {
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  padding: 0.65em 1.1em;
+  box-shadow:
+    inset 2px 2px 0 var(--wood-light),
+    inset -2px -2px 0 var(--wood-darkest),
+    0 0 0 2px var(--wood-darkest),
+    0 3px 0 var(--wood-darkest);
+}
+
+.chapter-actions .choice-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.chapter-actions .choice-btn:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset 2px 2px 0 var(--wood-dark),
+    inset -2px -2px 0 var(--wood-darkest),
+    0 0 0 2px var(--wood-darkest),
+    0 1px 0 var(--wood-darkest);
+}
+
 .advance-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -497,11 +558,11 @@
 
 .advance-hint {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   opacity: 0.8;
   letter-spacing: 0;
   text-transform: none;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 /* Echo tutorial */

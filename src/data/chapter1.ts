@@ -115,6 +115,21 @@ const PORTRAIT = {
   sukhostiy: "/images/characters/sukhostiy.png",
 };
 
+// Idle "blink" frame for each portrait that has one — swapped in briefly and
+// on a loop to make the standing character art feel alive rather than static.
+const PORTRAIT_BLINK: Record<string, string> = {
+  [PORTRAIT.yarema]: "/images/characters/yarema-blink.png",
+  [PORTRAIT.ostap]: "/images/characters/ostap-blink.png",
+  [PORTRAIT.mavka]: "/images/characters/mavka-blink.png",
+  [PORTRAIT.rusalka1]: "/images/characters/rusalka-1-blink.png",
+  [PORTRAIT.rusalka2]: "/images/characters/rusalka-2-blink.png",
+  [PORTRAIT.sukhostiy]: "/images/characters/sukhostiy-blink.png",
+};
+
+export function getPortraitBlink(portrait?: string): string | undefined {
+  return portrait ? PORTRAIT_BLINK[portrait] : undefined;
+}
+
 export const FROSKO_PORTRAIT = "/images/characters/frosko.png";
 
 export const chapter1Beats: Record<SceneId, Beat> = {
