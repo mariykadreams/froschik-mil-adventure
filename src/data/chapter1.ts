@@ -609,7 +609,6 @@ export const chapter1Beats: Record<SceneId, Beat> = {
         speaker: "Mavka",
         text: "I forgot to ask where the water was flowing from. I only listened to how loud the current sounded.",
       },
-      "The Rumor Tracker is saved to Frosko's journal — a tool he'll carry into whatever kingdom comes next.",
     ],
     lessonTitle: "Frosko's Journal",
     lessonText:
