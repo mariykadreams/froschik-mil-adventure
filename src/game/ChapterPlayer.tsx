@@ -52,6 +52,40 @@ function beatOpeningEntries(beat: Beat): Omit<LogEntry, "id">[] {
   }
 }
 
+function TypewriterText({ text }: { text: string }) {
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    if (!text) {
+      setVisibleCount(0);
+      return;
+    }
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setVisibleCount(text.length);
+      return;
+    }
+    setVisibleCount(0);
+    const tickMs = 16;
+    const totalTicks = 110;
+    const charsPerTick = Math.max(1, Math.ceil(text.length / totalTicks));
+    let i = 0;
+    const id = setInterval(() => {
+      i += charsPerTick;
+      setVisibleCount(Math.min(i, text.length));
+      if (i >= text.length) clearInterval(id);
+    }, tickMs);
+    return () => clearInterval(id);
+  }, [text]);
+
+  const done = visibleCount >= text.length;
+  return (
+    <>
+      {text.slice(0, visibleCount)}
+      {!done && <span className="typewriter-cursor">&#9612;</span>}
+    </>
+  );
+}
+
 function Line({ line }: { line: DialogueLine }) {
   if (typeof line === "string") {
     return <p className="story-line">{line}</p>;
@@ -335,7 +369,9 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                         <p className="story-line story-line--dialogue question-reply">
                           <span className="story-speaker">{beat.speaker}:</span>{" "}
                           {q.emote && <em className="story-emote">({q.emote}) </em>}
-                          &ldquo;{q.reply}&rdquo;
+                          &ldquo;
+                          <TypewriterText text={q.reply} />
+                          &rdquo;
                         </p>
                       )}
                     </div>
