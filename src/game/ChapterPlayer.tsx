@@ -52,6 +52,45 @@ function beatOpeningEntries(beat: Beat): Omit<LogEntry, "id">[] {
   }
 }
 
+function ScenePager({
+  page,
+  count,
+  onPrev,
+  onNext,
+}: {
+  page: number;
+  count: number;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  if (count <= 1) return null;
+  return (
+    <div className="scene-pager">
+      <button
+        className="scene-pager-arrow scene-pager-arrow--prev"
+        disabled={page === 0}
+        onClick={onPrev}
+        aria-label="Previous"
+      >
+        <img src="/assets/book/arrow.png" className="pixelated scene-pager-icon scene-pager-icon--prev" alt="" />
+      </button>
+      <div className="scene-pager-dots">
+        {Array.from({ length: count }).map((_, i) => (
+          <span key={i} className={`scene-pager-dot${i === page ? " is-active" : ""}`} />
+        ))}
+      </div>
+      <button
+        className="scene-pager-arrow scene-pager-arrow--next"
+        disabled={page === count - 1}
+        onClick={onNext}
+        aria-label="Next"
+      >
+        <img src="/assets/book/arrow.png" className="pixelated scene-pager-icon" alt="" />
+      </button>
+    </div>
+  );
+}
+
 function Line({ line }: { line: DialogueLine }) {
   if (typeof line === "string") {
     return <p className="story-line">{line}</p>;
@@ -77,6 +116,9 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const [selectedOrder, setSelectedOrder] = useState<string[]>([]);
   const [trackerResult, setTrackerResult] = useState<"idle" | "success" | "fail">("idle");
 
+  const [hubPage, setHubPage] = useState(0);
+  const [linePage, setLinePage] = useState(0);
+
   const logIdRef = useRef(0);
   const [log, setLog] = useState<LogEntry[]>(() =>
     beatOpeningEntries(beats[startId]).map((e) => ({ ...e, id: `log-${logIdRef.current++}` })),
@@ -89,6 +131,32 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const shuffledCards = useMemo<TrackerCard[]>(() => {
     if (beat.type !== "tracker") return [];
     return shuffle(beat.cards);
+  }, [beat]);
+
+  const hubSplit = useMemo(() => {
+    if (beat.type !== "hub") return null;
+    const splitIdx = beat.intro.findIndex((line) => typeof line !== "string");
+    const storyLines = splitIdx === -1 ? beat.intro : beat.intro.slice(0, splitIdx);
+    const askIntroLines = splitIdx === -1 ? [] : beat.intro.slice(splitIdx);
+    const pages: Array<"story" | "ask" | "actions"> = [
+      ...(storyLines.length > 0 ? (["story"] as const) : []),
+      "ask",
+      "actions",
+    ];
+    return { storyLines, askIntroLines, pages };
+  }, [beat]);
+
+  const LINES_PER_PAGE = 2;
+  const linePages = useMemo(() => {
+    if (beat.type !== "cutscene" && beat.type !== "debrief") return null;
+    const lines = beat.lines;
+    const chunks: DialogueLine[][] = [];
+    for (let i = 0; i < lines.length; i += LINES_PER_PAGE) {
+      chunks.push(lines.slice(i, i + LINES_PER_PAGE));
+    }
+    if (chunks.length === 0) chunks.push([]);
+    const pageCount = beat.type === "debrief" ? chunks.length + 1 : chunks.length;
+    return { chunks, pageCount };
   }, [beat]);
 
   useEffect(() => {
@@ -109,6 +177,8 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
     setEchoSubmitted(false);
     setSelectedOrder([]);
     setTrackerResult("idle");
+    setHubPage(0);
+    setLinePage(0);
     pushLog(beatOpeningEntries(beats[next]));
   };
 
@@ -236,18 +306,26 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
         </header>
 
         <div className="chapter-play-panel">
-          {beat.type === "cutscene" && (
+          {beat.type === "cutscene" && linePages && (
             <>
+              <ScenePager
+                page={linePage}
+                count={linePages.pageCount}
+                onPrev={() => setLinePage((p) => Math.max(0, p - 1))}
+                onNext={() => setLinePage((p) => Math.min(linePages.pageCount - 1, p + 1))}
+              />
               <div className="story-lines">
-                {beat.lines.map((line, i) => (
+                {linePages.chunks[linePage].map((line, i) => (
                   <Line key={i} line={line} />
                 ))}
               </div>
-              <div className="chapter-actions">
-                <button className="pixel-btn" onClick={() => goTo(beat.next)}>
-                  Continue
-                </button>
-              </div>
+              {linePage === linePages.pageCount - 1 && (
+                <div className="chapter-actions">
+                  <button className="pixel-btn" onClick={() => goTo(beat.next)}>
+                    Continue
+                  </button>
+                </div>
+              )}
             </>
           )}
 
@@ -307,76 +385,99 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
             </>
           )}
 
-          {beat.type === "hub" && (
+          {beat.type === "hub" && hubSplit && (
             <>
-              <div className="story-lines">
-                {beat.intro.map((line, i) => (
-                  <Line key={i} line={line} />
-                ))}
-              </div>
+              <ScenePager
+                page={hubPage}
+                count={hubSplit.pages.length}
+                onPrev={() => setHubPage((p) => Math.max(0, p - 1))}
+                onNext={() => setHubPage((p) => Math.min(hubSplit.pages.length - 1, p + 1))}
+              />
 
-              <h3 className="section-label section-label--questions">
-                <span className="section-label-icon">?</span>
-                Ask {beat.speaker}
-              </h3>
-              <div className="question-list">
-                {beat.questions.map((q) => {
-                  const asked = askedQuestions.has(q.id);
-                  return (
-                    <div key={q.id} className="question-block">
-                      <button
-                        className={`question-btn${asked ? " is-asked" : ""}`}
-                        onClick={() => askQuestion(q.id, beat.speaker, q.prompt, q.reply, q.emote, q.addsEvidence)}
-                      >
-                        <span className="question-btn-icon">?</span>
-                        {q.prompt}
-                      </button>
-                      {asked && (
-                        <p className="story-line story-line--dialogue question-reply">
-                          <span className="story-speaker">{beat.speaker}:</span>{" "}
-                          {q.emote && <em className="story-emote">({q.emote}) </em>}
-                          &ldquo;{q.reply}&rdquo;
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              {hubSplit.pages[hubPage] === "story" && (
+                <div className="story-lines">
+                  {hubSplit.storyLines.map((line, i) => (
+                    <Line key={i} line={line} />
+                  ))}
+                </div>
+              )}
 
-              {trapMessage && <p className="trap-message">{trapMessage}</p>}
+              {hubSplit.pages[hubPage] === "ask" && (
+                <>
+                  <div className="story-lines">
+                    {hubSplit.askIntroLines.map((line, i) => (
+                      <Line key={i} line={line} />
+                    ))}
+                  </div>
 
-              <h3 className="section-label section-label--actions">
-                <span className="section-label-icon">&#9656;</span>
-                What will Frosko do?
-              </h3>
-              <div className="chapter-actions chapter-actions--choices">
-                {beat.exits.map((exit) => {
-                  if (exit.kind === "trap") {
-                    return (
-                      <button
-                        key={exit.id}
-                        className="pixel-btn choice-btn trap-btn"
-                        onClick={() => triggerTrap(exit.trapText)}
-                      >
-                        {exit.label}
-                      </button>
-                    );
-                  }
-                  const locked = !!exit.requiresQuestionId && !askedQuestions.has(exit.requiresQuestionId);
-                  return (
-                    <button
-                      key={exit.id}
-                      className="pixel-btn choice-btn advance-btn"
-                      disabled={locked}
-                      title={locked ? exit.hint : undefined}
-                      onClick={() => goTo(exit.next)}
-                    >
-                      {exit.label}
-                      {locked && exit.hint && <span className="advance-hint"> ({exit.hint})</span>}
-                    </button>
-                  );
-                })}
-              </div>
+                  <h3 className="section-label section-label--questions">
+                    <span className="section-label-icon">?</span>
+                    Ask {beat.speaker}
+                  </h3>
+                  <div className="question-list">
+                    {beat.questions.map((q) => {
+                      const asked = askedQuestions.has(q.id);
+                      return (
+                        <div key={q.id} className="question-block">
+                          <button
+                            className={`question-btn${asked ? " is-asked" : ""}`}
+                            onClick={() => askQuestion(q.id, beat.speaker, q.prompt, q.reply, q.emote, q.addsEvidence)}
+                          >
+                            <span className="question-btn-icon">?</span>
+                            {q.prompt}
+                          </button>
+                          {asked && (
+                            <p className="story-line story-line--dialogue question-reply">
+                              <span className="story-speaker">{beat.speaker}:</span>{" "}
+                              {q.emote && <em className="story-emote">({q.emote}) </em>}
+                              &ldquo;{q.reply}&rdquo;
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+
+              {hubSplit.pages[hubPage] === "actions" && (
+                <>
+                  {trapMessage && <p className="trap-message">{trapMessage}</p>}
+
+                  <h3 className="section-label section-label--actions">
+                    <span className="section-label-icon">&#9656;</span>
+                    What will Frosko do?
+                  </h3>
+                  <div className="chapter-actions chapter-actions--choices">
+                    {beat.exits.map((exit) => {
+                      if (exit.kind === "trap") {
+                        return (
+                          <button
+                            key={exit.id}
+                            className="pixel-btn choice-btn trap-btn"
+                            onClick={() => triggerTrap(exit.trapText)}
+                          >
+                            {exit.label}
+                          </button>
+                        );
+                      }
+                      const locked = !!exit.requiresQuestionId && !askedQuestions.has(exit.requiresQuestionId);
+                      return (
+                        <button
+                          key={exit.id}
+                          className="pixel-btn choice-btn advance-btn"
+                          disabled={locked}
+                          title={locked ? exit.hint : undefined}
+                          onClick={() => goTo(exit.next)}
+                        >
+                          {exit.label}
+                          {locked && exit.hint && <span className="advance-hint"> ({exit.hint})</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </>
           )}
 
@@ -457,24 +558,35 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
             </>
           )}
 
-          {beat.type === "debrief" && (
+          {beat.type === "debrief" && linePages && (
             <>
-              <div className="story-lines">
-                {beat.lines.map((line, i) => (
-                  <Line key={i} line={line} />
-                ))}
-              </div>
+              <ScenePager
+                page={linePage}
+                count={linePages.pageCount}
+                onPrev={() => setLinePage((p) => Math.max(0, p - 1))}
+                onNext={() => setLinePage((p) => Math.min(linePages.pageCount - 1, p + 1))}
+              />
 
-              <div className="debrief-card">
-                <h2 className="debrief-title">{beat.lessonTitle}</h2>
-                <p className="debrief-text">{beat.lessonText}</p>
-              </div>
+              {linePage < linePages.chunks.length ? (
+                <div className="story-lines">
+                  {linePages.chunks[linePage].map((line, i) => (
+                    <Line key={i} line={line} />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="debrief-card">
+                    <h2 className="debrief-title">{beat.lessonTitle}</h2>
+                    <p className="debrief-text">{beat.lessonText}</p>
+                  </div>
 
-              <div className="chapter-actions">
-                <button className="pixel-btn" onClick={onComplete}>
-                  Chapter Complete
-                </button>
-              </div>
+                  <div className="chapter-actions">
+                    <button className="pixel-btn" onClick={onComplete}>
+                      Chapter Complete
+                    </button>
+                  </div>
+                </>
+              )}
             </>
           )}
         </div>
