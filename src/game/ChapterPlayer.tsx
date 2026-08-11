@@ -347,7 +347,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
 
               <h3 className="section-label section-label--actions">
                 <span className="section-label-icon">&#9656;</span>
-                What will Frosko do?
+                What should Frosko do?
               </h3>
               <div className="chapter-actions chapter-actions--choices">
                 {beat.exits.map((exit) => {
