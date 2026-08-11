@@ -648,11 +648,35 @@
 }
 
 .tracker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-family: var(--font-ui);
   font-size: 0.7rem;
   background: var(--gold);
   color: var(--wood-darkest);
+  border: none;
   padding: 0.35em 0.7em;
+  cursor: pointer;
+  transition: background 0.08s steps(2);
+}
+
+.tracker-chip:hover:not(:disabled) {
+  background: var(--topic-disinfo-light);
+  color: var(--parchment);
+}
+
+.tracker-chip:disabled {
+  cursor: not-allowed;
+}
+
+.tracker-chip-remove {
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.tracker-clear-btn {
+  background: var(--wood-dark);
 }
 
 .tracker-cards {

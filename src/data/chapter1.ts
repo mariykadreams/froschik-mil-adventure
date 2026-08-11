@@ -110,8 +110,8 @@ const PORTRAIT = {
   yarema: "/images/characters/yarema.png",
   ostap: "/images/characters/ostap.png",
   mavka: "/images/characters/mavka.png",
-  rusalka1: "/images/characters/rusalka-1.png",
-  rusalka2: "/images/characters/rusalka-2.png",
+  berehynia: "/images/characters/rusalka-1.png",
+  lelia: "/images/characters/rusalka-2.png",
   sukhostiy: "/images/characters/sukhostiy.png",
 };
 
@@ -121,8 +121,8 @@ const PORTRAIT_BLINK: Record<string, string> = {
   [PORTRAIT.yarema]: "/images/characters/yarema-blink.png",
   [PORTRAIT.ostap]: "/images/characters/ostap-blink.png",
   [PORTRAIT.mavka]: "/images/characters/mavka-blink.png",
-  [PORTRAIT.rusalka1]: "/images/characters/rusalka-1-blink.png",
-  [PORTRAIT.rusalka2]: "/images/characters/rusalka-2-blink.png",
+  [PORTRAIT.berehynia]: "/images/characters/rusalka-1-blink.png",
+  [PORTRAIT.lelia]: "/images/characters/rusalka-2-blink.png",
   [PORTRAIT.sukhostiy]: "/images/characters/sukhostiy-blink.png",
 };
 
@@ -312,7 +312,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
         id: "continue_river",
         kind: "advance",
         label: "Follow the story to the river.",
-        next: "s4_rusalka1",
+        next: "s4_berehynia",
         requiresQuestionId: "who_told_you",
         hint: "Ask who told him first.",
       },
@@ -326,24 +326,24 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     ],
   },
 
-  s4_rusalka1: {
+  s4_berehynia: {
     type: "hub",
-    id: "s4_rusalka1",
+    id: "s4_berehynia",
     location: "The riverbank",
     background: BG.river1,
-    portrait: PORTRAIT.rusalka1,
-    speaker: "Rusalka",
+    portrait: PORTRAIT.berehynia,
+    speaker: "Berehynia",
     intro: [
       {
-        speaker: "Rusalka",
-        text: "The lisovyk told us — a man with FIRE came for the grove. My sister swears she smelled smoke that very morning!",
+        speaker: "Berehynia",
+        text: "The lisovyk told us — a man with FIRE came for the grove. My sister Lelia swears she smelled smoke that very morning!",
       },
     ],
     questions: [
       {
         id: "who_told_you",
         prompt: "Who told you?",
-        reply: "The lisovyk. And my sister backs it — she smelled the smoke herself.",
+        reply: "The lisovyk. And Lelia backs it — she smelled the smoke herself.",
       },
       {
         id: "did_you_see_it",
@@ -357,7 +357,7 @@ export const chapter1Beats: Record<SceneId, Beat> = {
         id: "continue_downstream",
         kind: "advance",
         label: "Follow the story downstream.",
-        next: "s4_rusalka2",
+        next: "s4_lelia",
         requiresQuestionId: "who_told_you",
         hint: "Ask who told her first.",
       },
@@ -371,16 +371,16 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     ],
   },
 
-  s4_rusalka2: {
+  s4_lelia: {
     type: "hub",
-    id: "s4_rusalka2",
+    id: "s4_lelia",
     location: "Further downstream",
     background: BG.river2,
-    portrait: PORTRAIT.rusalka2,
-    speaker: "Rusalka (downstream)",
+    portrait: PORTRAIT.lelia,
+    speaker: "Lelia",
     intro: [
       {
-        speaker: "Rusalka (downstream)",
+        speaker: "Lelia",
         text: "They mean to burn the whole grove at MIDSUMMER, when the wood is driest — someone told me the very day they'd chosen.",
       },
     ],
@@ -515,17 +515,17 @@ export const chapter1Beats: Record<SceneId, Beat> = {
     cards: [
       { id: "branches", label: "The Truth", quote: "A cold boy took a few branches from the grove edge." },
       { id: "lisovyk", label: "The Lisovyk", quote: "A man came with an axe, meant for burning." },
-      { id: "rusalka1", label: "Rusalka", quote: "A man with fire — my sister smelled smoke.", scarMark: true },
+      { id: "berehynia", label: "Berehynia", quote: "A man with fire — my sister smelled smoke.", scarMark: true },
       {
-        id: "rusalka2",
-        label: "Rusalka (downstream)",
+        id: "lelia",
+        label: "Lelia",
         quote: "They'll burn the whole grove at midsummer.",
         scarMark: true,
       },
       { id: "birdspirit", label: "The Bird-Spirit", quote: "They mean to burn us all — everybody says it." },
       { id: "mavka", label: "Mavka", quote: "Certain. Calling the whole forest to fight." },
     ],
-    correctOrder: ["branches", "lisovyk", "rusalka1", "rusalka2", "birdspirit", "mavka"],
+    correctOrder: ["branches", "lisovyk", "berehynia", "lelia", "birdspirit", "mavka"],
     failText: "The story doesn't flow this way — trace who spoke to whom, and try again.",
     next: "s8_sukhostiy",
   },
