@@ -93,7 +93,7 @@ export type DebriefBeat = {
 
 export type Beat = CutsceneBeat | HubBeat | EchoTutorialBeat | TrackerBeat | DebriefBeat;
 
-export const CHAPTER1_START: SceneId = "s0_road";
+export const CHAPTER1_START: SceneId = "s_intro";
 
 const BG = {
   village1: "/images/bg/village-1.png",
@@ -133,6 +133,19 @@ export function getPortraitBlink(portrait?: string): string | undefined {
 export const FROSKO_PORTRAIT = "/images/characters/frosko.png";
 
 export const chapter1Beats: Record<SceneId, Beat> = {
+  s_intro: {
+    type: "cutscene",
+    id: "s_intro",
+    location: "Somewhere on the road",
+    background: BG.village1,
+    lines: [
+      "Frosko is a traveler by trade and by nature — the kind who can't walk past something strange without stopping to ask why.",
+      "Word reaches him of a village called Verbivka, where the forest has gone quiet in all the wrong ways. Something there doesn't add up.",
+      "Frosko means to find out what — and, more than that, why everyone there is so certain they already know.",
+    ],
+    next: "s0_road",
+  },
+
   s0_road: {
     type: "cutscene",
     id: "s0_road",
