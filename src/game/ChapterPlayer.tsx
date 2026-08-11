@@ -91,6 +91,40 @@ function ScenePager({
   );
 }
 
+function TypewriterText({ text }: { text: string }) {
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    if (!text) {
+      setVisibleCount(0);
+      return;
+    }
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setVisibleCount(text.length);
+      return;
+    }
+    setVisibleCount(0);
+    const tickMs = 16;
+    const totalTicks = 110;
+    const charsPerTick = Math.max(1, Math.ceil(text.length / totalTicks));
+    let i = 0;
+    const id = setInterval(() => {
+      i += charsPerTick;
+      setVisibleCount(Math.min(i, text.length));
+      if (i >= text.length) clearInterval(id);
+    }, tickMs);
+    return () => clearInterval(id);
+  }, [text]);
+
+  const done = visibleCount >= text.length;
+  return (
+    <>
+      {text.slice(0, visibleCount)}
+      {!done && <span className="typewriter-cursor">&#9612;</span>}
+    </>
+  );
+}
+
 function Line({ line }: { line: DialogueLine }) {
   if (typeof line === "string") {
     return <p className="story-line">{line}</p>;
@@ -206,34 +240,47 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   };
 
   const pickTrackerCard = (id: string) => {
-    if (trackerResult !== "idle" || selectedOrder.includes(id)) return;
+    if (trackerResult === "success" || selectedOrder.includes(id)) return;
+    setSelectedOrder((prev) => [...prev, id]);
+    if (trackerResult === "fail") setTrackerResult("idle");
+  };
+
+  const removeTrackerCard = (id: string) => {
+    if (trackerResult === "success") return;
+    setSelectedOrder((prev) => prev.filter((cardId) => cardId !== id));
+    if (trackerResult === "fail") setTrackerResult("idle");
+  };
+
+  const clearTrackerOrder = () => {
+    if (trackerResult === "success") return;
+    setSelectedOrder([]);
+    setTrackerResult("idle");
+  };
+
+  const checkTrackerOrder = () => {
     const beatT = beat.type === "tracker" ? beat : null;
-    if (!beatT) return;
-    const nextOrder = [...selectedOrder, id];
-    setSelectedOrder(nextOrder);
-    if (nextOrder.length === beatT.correctOrder.length) {
-      const isCorrect = nextOrder.every((cardId, i) => cardId === beatT.correctOrder[i]);
-      if (isCorrect) {
-        setTrackerResult("success");
-        setEvidence((prev) => new Set(prev).add("COMPLETED_TRACKER"));
-        const scarLabels = beatT.cards
-          .filter((c) => c.scarMark)
-          .map((c) => c.label)
-          .join(" and ");
-        pushLog([
-          {
-            kind: "story",
-            text: "Locked into place, the claim visibly grows at every hop — a few branches become a whole wood on fire.",
-          },
-          {
-            kind: "story",
-            text: `Two links carry the same raw, splintered scar: ${scarLabels}. It doesn't match any creature Frosko has met.`,
-          },
-        ]);
-      } else {
-        setTrackerResult("fail");
-        pushLog([{ kind: "trap", text: beatT.failText }]);
-      }
+    if (!beatT || selectedOrder.length !== beatT.correctOrder.length) return;
+    const isCorrect = selectedOrder.every((cardId, i) => cardId === beatT.correctOrder[i]);
+    if (isCorrect) {
+      setTrackerResult("success");
+      setEvidence((prev) => new Set(prev).add("COMPLETED_TRACKER"));
+      const scarLabels = beatT.cards
+        .filter((c) => c.scarMark)
+        .map((c) => c.label)
+        .join(" and ");
+      pushLog([
+        {
+          kind: "story",
+          text: "Locked into place, the claim visibly grows at every hop — a few branches become a whole wood on fire.",
+        },
+        {
+          kind: "story",
+          text: `Two links carry the same raw, splintered scar: ${scarLabels}. It doesn't match any creature Frosko has met.`,
+        },
+      ]);
+    } else {
+      setTrackerResult("fail");
+      pushLog([{ kind: "trap", text: beatT.failText }]);
     }
   };
 
@@ -430,7 +477,9 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                             <p className="story-line story-line--dialogue question-reply">
                               <span className="story-speaker">{beat.speaker}:</span>{" "}
                               {q.emote && <em className="story-emote">({q.emote}) </em>}
-                              &ldquo;{q.reply}&rdquo;
+                              &ldquo;
+                              <TypewriterText text={q.reply} />
+                              &rdquo;
                             </p>
                           )}
                         </div>
@@ -446,7 +495,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
 
                   <h3 className="section-label section-label--actions">
                     <span className="section-label-icon">&#9656;</span>
-                    What will Frosko do?
+                    What should Frosko do?
                   </h3>
                   <div className="chapter-actions chapter-actions--choices">
                     {beat.exits.map((exit) => {
@@ -490,13 +539,23 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
               </div>
 
               <div className="tracker-selected">
-                {selectedOrder.length === 0 && <p className="tracker-hint">Tap the accounts in the order they were told.</p>}
+                {selectedOrder.length === 0 && (
+                  <p className="tracker-hint">Tap the accounts in the order they were told.</p>
+                )}
                 {selectedOrder.map((id, i) => {
                   const card = beat.cards.find((c) => c.id === id)!;
                   return (
-                    <span key={id} className="tracker-chip">
+                    <button
+                      key={id}
+                      type="button"
+                      className="tracker-chip"
+                      disabled={trackerResult === "success"}
+                      onClick={() => removeTrackerCard(id)}
+                      title="Remove from order"
+                    >
                       {i + 1}. {card.label}
-                    </span>
+                      {trackerResult !== "success" && <span className="tracker-chip-remove">&times;</span>}
+                    </button>
                   );
                 })}
               </div>
@@ -506,7 +565,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                   <button
                     key={card.id}
                     className="tracker-card"
-                    disabled={selectedOrder.includes(card.id) || trackerResult !== "idle"}
+                    disabled={selectedOrder.includes(card.id) || trackerResult === "success"}
                     onClick={() => pickTrackerCard(card.id)}
                   >
                     <span className="tracker-card-label">{card.label}</span>
@@ -515,21 +574,23 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                 ))}
               </div>
 
-              {trackerResult === "fail" && (
-                <>
-                  <p className="trap-message">{beat.failText}</p>
-                  <div className="chapter-actions">
-                    <button
-                      className="pixel-btn"
-                      onClick={() => {
-                        setSelectedOrder([]);
-                        setTrackerResult("idle");
-                      }}
-                    >
-                      Try Again
+              {trackerResult === "fail" && <p className="trap-message">{beat.failText}</p>}
+
+              {trackerResult !== "success" && (
+                <div className="chapter-actions">
+                  {selectedOrder.length > 0 && (
+                    <button className="pixel-btn tracker-clear-btn" onClick={clearTrackerOrder}>
+                      Clear Order
                     </button>
-                  </div>
-                </>
+                  )}
+                  <button
+                    className="pixel-btn"
+                    disabled={selectedOrder.length !== beat.correctOrder.length}
+                    onClick={checkTrackerOrder}
+                  >
+                    Check Order
+                  </button>
+                </div>
               )}
 
               {trackerResult === "success" && (
