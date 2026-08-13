@@ -91,6 +91,21 @@ function ScenePager({
   );
 }
 
+function Firework({ className, delay = "0s" }: { className: string; delay?: string }) {
+  const particles = Array.from({ length: 8 });
+  return (
+    <div className={`firework ${className}`}>
+      {particles.map((_, i) => (
+        <span
+          key={i}
+          className="firework-particle"
+          style={{ "--angle": `${(360 / particles.length) * i}deg`, animationDelay: delay } as React.CSSProperties}
+        />
+      ))}
+    </div>
+  );
+}
+
 function TypewriterText({ text }: { text: string }) {
   const [visibleCount, setVisibleCount] = useState(0);
 
@@ -143,6 +158,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const [askedQuestions, setAskedQuestions] = useState<Set<string>>(new Set());
   const [evidence, setEvidence] = useState<Set<string>>(new Set());
   const [gameOverText, setGameOverText] = useState<string | null>(null);
+  const [showWinScreen, setShowWinScreen] = useState(false);
 
   const [echoInput, setEchoInput] = useState("");
   const [echoSubmitted, setEchoSubmitted] = useState(false);
@@ -385,6 +401,25 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
               </button>
               <button className="pixel-btn gameover-btn-secondary" onClick={restartChapter}>
                 Restart Chapter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showWinScreen && (
+        <div className="win-overlay">
+          <Firework className="firework--pos-1 firework--gold" />
+          <Firework className="firework--pos-2 firework--teal" delay="0.45s" />
+          <Firework className="firework--pos-3 firework--rose" delay="0.9s" />
+          <div className="win-panel">
+            <img src={FROSKO_PORTRAIT} className="win-portrait pixelated" alt="Frosko celebrating" />
+            <p className="win-tag">Chapter Complete</p>
+            <h2 className="win-title">Well Done!</h2>
+            <p className="win-text">Frosko&apos;s a little wiser — and so, hopefully, are you.</p>
+            <div className="win-actions">
+              <button className="pixel-btn win-btn-primary" onClick={onComplete}>
+                Continue
               </button>
             </div>
           </div>
@@ -683,7 +718,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                   </div>
 
                   <div className="chapter-actions">
-                    <button className="pixel-btn" onClick={onComplete}>
+                    <button className="pixel-btn" onClick={() => setShowWinScreen(true)}>
                       Chapter Complete
                     </button>
                   </div>
