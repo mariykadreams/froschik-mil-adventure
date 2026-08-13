@@ -323,6 +323,12 @@
   gap: 1rem;
 }
 
+@media (max-width: 760px) {
+  .chapter-play-content {
+    padding-bottom: 30vh;
+  }
+}
+
 .chapter-play-header {
   flex-shrink: 0;
   text-align: center;
@@ -367,15 +373,6 @@
     0 10px 24px rgba(0, 0, 0, 0.4);
 }
 
-@media (max-width: 760px) {
-  .chapter-play-panel {
-    padding-left: 24vw;
-  }
-
-  .chapter-play-panel--has-npc {
-    padding-right: 34vw;
-  }
-}
 
 /* Scene page navigation */
 
