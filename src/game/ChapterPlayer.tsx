@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
-import { FROSKO_PORTRAIT, FROSKO_SAD_PORTRAIT, getPortraitBlink } from "../data/chapter1";
+import { FROSKO_PORTRAIT, FROSKO_SAD_PORTRAIT, FROSKO_HAPPY_PORTRAIT, getPortraitBlink } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
 import "./ChapterPlayer.css";
 
@@ -413,7 +413,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
           <Firework className="firework--pos-2 firework--teal" delay="0.45s" />
           <Firework className="firework--pos-3 firework--rose" delay="0.9s" />
           <div className="win-panel">
-            <img src={FROSKO_PORTRAIT} className="win-portrait pixelated" alt="Frosko celebrating" />
+            <img src={FROSKO_HAPPY_PORTRAIT} className="win-portrait pixelated" alt="Frosko celebrating" />
             <p className="win-tag">Chapter Complete</p>
             <h2 className="win-title">Well Done!</h2>
             <p className="win-text">Frosko&apos;s a little wiser — and so, hopefully, are you.</p>
