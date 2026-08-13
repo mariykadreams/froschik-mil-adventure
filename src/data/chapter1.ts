@@ -95,43 +95,45 @@ export type Beat = CutsceneBeat | HubBeat | EchoTutorialBeat | TrackerBeat | Deb
 
 export const CHAPTER1_START: SceneId = "s_intro";
 
+const asset = (path: string): string => import.meta.env.BASE_URL + path;
+
 const BG = {
-  village1: "/images/bg/village-1.png",
-  village2: "/images/bg/village-2.png",
-  village3: "/images/bg/village-3.png",
-  hollow1: "/images/bg/hollow-1.png",
-  hollow2: "/images/bg/hollow-2.png",
-  river1: "/images/bg/river-1.png",
-  river2: "/images/bg/river-2.png",
-  treeClearing: "/images/bg/tree-clearing.png",
+  village1: asset("images/bg/village-1.png"),
+  village2: asset("images/bg/village-2.png"),
+  village3: asset("images/bg/village-3.png"),
+  hollow1: asset("images/bg/hollow-1.png"),
+  hollow2: asset("images/bg/hollow-2.png"),
+  river1: asset("images/bg/river-1.png"),
+  river2: asset("images/bg/river-2.png"),
+  treeClearing: asset("images/bg/tree-clearing.png"),
 };
 
 const PORTRAIT = {
-  yarema: "/images/characters/yarema.png",
-  ostap: "/images/characters/ostap.png",
-  mavka: "/images/characters/mavka.png",
-  berehynia: "/images/characters/rusalka-1.png",
-  lelia: "/images/characters/rusalka-2.png",
-  sukhostiy: "/images/characters/sukhostiy.png",
+  yarema: asset("images/characters/yarema.png"),
+  ostap: asset("images/characters/ostap.png"),
+  mavka: asset("images/characters/mavka.png"),
+  berehynia: asset("images/characters/rusalka-1.png"),
+  lelia: asset("images/characters/rusalka-2.png"),
+  sukhostiy: asset("images/characters/sukhostiy.png"),
 };
 
 // Idle "blink" frame for each portrait that has one — swapped in briefly and
 // on a loop to make the standing character art feel alive rather than static.
 const PORTRAIT_BLINK: Record<string, string> = {
-  [PORTRAIT.yarema]: "/images/characters/yarema-blink.png",
-  [PORTRAIT.ostap]: "/images/characters/ostap-blink.png",
-  [PORTRAIT.mavka]: "/images/characters/mavka-blink.png",
-  [PORTRAIT.berehynia]: "/images/characters/rusalka-1-blink.png",
-  [PORTRAIT.lelia]: "/images/characters/rusalka-2-blink.png",
-  [PORTRAIT.sukhostiy]: "/images/characters/sukhostiy-blink.png",
+  [PORTRAIT.yarema]: asset("images/characters/yarema-blink.png"),
+  [PORTRAIT.ostap]: asset("images/characters/ostap-blink.png"),
+  [PORTRAIT.mavka]: asset("images/characters/mavka-blink.png"),
+  [PORTRAIT.berehynia]: asset("images/characters/rusalka-1-blink.png"),
+  [PORTRAIT.lelia]: asset("images/characters/rusalka-2-blink.png"),
+  [PORTRAIT.sukhostiy]: asset("images/characters/sukhostiy-blink.png"),
 };
 
 export function getPortraitBlink(portrait?: string): string | undefined {
   return portrait ? PORTRAIT_BLINK[portrait] : undefined;
 }
 
-export const FROSKO_PORTRAIT = "/images/characters/frosko.png";
-export const FROSKO_SAD_PORTRAIT = "/images/characters/frosko_sad.png";
+export const FROSKO_PORTRAIT = asset("images/characters/frosko.png");
+export const FROSKO_SAD_PORTRAIT = asset("images/characters/frosko_sad.png");
 
 export const chapter1Beats: Record<SceneId, Beat> = {
   s_intro: {

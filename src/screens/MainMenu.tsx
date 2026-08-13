@@ -14,7 +14,7 @@ export default function MainMenu({ onPlay, onSettings }: MainMenuProps) {
 
       <div className="menu-content">
         <div className="menu-title-block">
-          <img src="/images/logo.png" className="menu-logo pixelated" alt="Frosko's Stories" />
+          <img src={`${import.meta.env.BASE_URL}images/logo.png`} className="menu-logo pixelated" alt="Frosko's Stories" />
           <p className="menu-subtitle">MIL Adventure</p>
         </div>
 

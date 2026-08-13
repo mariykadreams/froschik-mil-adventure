@@ -71,7 +71,7 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
             onClick={() => goTo(focusIndex - 1)}
             aria-label="Previous book"
           >
-            <img src="/assets/book/arrow.png" className="pixelated arrow-icon arrow-icon--prev" alt="" />
+            <img src={`${import.meta.env.BASE_URL}assets/book/arrow.png`} className="pixelated arrow-icon arrow-icon--prev" alt="" />
           </button>
 
           <div
@@ -96,7 +96,7 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
             onClick={() => goTo(focusIndex + 1)}
             aria-label="Next book"
           >
-            <img src="/assets/book/arrow.png" className="pixelated arrow-icon" alt="" />
+            <img src={`${import.meta.env.BASE_URL}assets/book/arrow.png`} className="pixelated arrow-icon" alt="" />
           </button>
         </div>
 

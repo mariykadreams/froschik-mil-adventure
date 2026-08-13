@@ -17,7 +17,7 @@ export default function ChaptersScreen({ book, onBack, onSelectChapter }: Chapte
         <div className="chapters-stage">
           <div className="open-book">
             <div className="page page--left">
-              <img src="/assets/book/page-left.png" className="pixelated page-bg" alt="" />
+              <img src={`${import.meta.env.BASE_URL}assets/book/page-left.png`} className="pixelated page-bg" alt="" />
               <div className="page-content">
                 <h2 className="page-title">{book.title}</h2>
                 <p className="page-category">{book.category}</p>
@@ -26,7 +26,7 @@ export default function ChaptersScreen({ book, onBack, onSelectChapter }: Chapte
             </div>
 
             <div className="page page--right">
-              <img src="/assets/book/page-right.png" className="pixelated page-bg" alt="" />
+              <img src={`${import.meta.env.BASE_URL}assets/book/page-right.png`} className="pixelated page-bg" alt="" />
               <div className="page-content">
                 <ul className="chapter-list">
                   {book.chapters.map((chapter) => (

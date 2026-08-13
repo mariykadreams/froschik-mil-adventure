@@ -72,7 +72,7 @@ function ScenePager({
         onClick={onPrev}
         aria-label="Previous"
       >
-        <img src="/assets/book/arrow.png" className="pixelated scene-pager-icon scene-pager-icon--prev" alt="" />
+        <img src={`${import.meta.env.BASE_URL}assets/book/arrow.png`} className="pixelated scene-pager-icon scene-pager-icon--prev" alt="" />
       </button>
       <div className="scene-pager-dots">
         {Array.from({ length: count }).map((_, i) => (
@@ -85,7 +85,7 @@ function ScenePager({
         onClick={onNext}
         aria-label="Next"
       >
-        <img src="/assets/book/arrow.png" className="pixelated scene-pager-icon" alt="" />
+        <img src={`${import.meta.env.BASE_URL}assets/book/arrow.png`} className="pixelated scene-pager-icon" alt="" />
       </button>
     </div>
   );
@@ -329,7 +329,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
       <img src={FROSKO_PORTRAIT} className="frosko-portrait pixelated" alt="Frosko" />
 
       <button className="chapter-back-arrow" onClick={onExit} aria-label="Leave chapter">
-        <img src="/assets/book/arrow.png" className="pixelated back-arrow-icon" alt="" />
+        <img src={`${import.meta.env.BASE_URL}assets/book/arrow.png`} className="pixelated back-arrow-icon" alt="" />
       </button>
 
       <button className="chapter-log-button" onClick={() => setLogOpen(true)} aria-label="View Frosko's journal">
