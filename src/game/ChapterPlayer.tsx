@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
-import { FROSKO_PORTRAIT, getPortraitBlink } from "../data/chapter1";
+import { FROSKO_PORTRAIT, FROSKO_SAD_PORTRAIT, getPortraitBlink } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
 import "./ChapterPlayer.css";
 
@@ -142,7 +142,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const [currentId, setCurrentId] = useState(startId);
   const [askedQuestions, setAskedQuestions] = useState<Set<string>>(new Set());
   const [evidence, setEvidence] = useState<Set<string>>(new Set());
-  const [trapMessage, setTrapMessage] = useState<string | null>(null);
+  const [gameOverText, setGameOverText] = useState<string | null>(null);
 
   const [echoInput, setEchoInput] = useState("");
   const [echoSubmitted, setEchoSubmitted] = useState(false);
@@ -206,7 +206,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const goTo = (next: SceneId) => {
     setCurrentId(next);
     setAskedQuestions(new Set());
-    setTrapMessage(null);
+    setGameOverText(null);
     setEchoInput("");
     setEchoSubmitted(false);
     setSelectedOrder([]);
@@ -235,8 +235,29 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   };
 
   const triggerTrap = (trapText: string) => {
-    setTrapMessage(trapText);
+    setGameOverText(trapText);
     pushLog([{ kind: "trap", text: trapText }]);
+  };
+
+  const retryStep = () => {
+    setGameOverText(null);
+    setTrackerResult((r) => (r === "fail" ? "idle" : r));
+  };
+
+  const restartChapter = () => {
+    setCurrentId(startId);
+    setAskedQuestions(new Set());
+    setEvidence(new Set());
+    setGameOverText(null);
+    setEchoInput("");
+    setEchoSubmitted(false);
+    setSelectedOrder([]);
+    setTrackerResult("idle");
+    setHubPage(0);
+    setLinePage(0);
+    setLogOpen(false);
+    logIdRef.current = 0;
+    setLog(beatOpeningEntries(beats[startId]).map((e) => ({ ...e, id: `log-${logIdRef.current++}` })));
   };
 
   const pickTrackerCard = (id: string) => {
@@ -281,6 +302,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
     } else {
       setTrackerResult("fail");
       pushLog([{ kind: "trap", text: beatT.failText }]);
+      setGameOverText(beatT.failText);
     }
   };
 
@@ -341,6 +363,29 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                   </p>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {gameOverText && (
+        <div className="gameover-overlay">
+          <div className="gameover-panel">
+            <img
+              src={FROSKO_SAD_PORTRAIT}
+              className="gameover-portrait pixelated"
+              alt="Frosko looking dismayed"
+            />
+            <p className="gameover-tag">Wrong turn</p>
+            <h2 className="gameover-title">Game Over</h2>
+            <p className="gameover-text">{gameOverText}</p>
+            <div className="gameover-actions">
+              <button className="pixel-btn gameover-btn-primary" onClick={retryStep}>
+                Try Again
+              </button>
+              <button className="pixel-btn gameover-btn-secondary" onClick={restartChapter}>
+                Restart Chapter
+              </button>
             </div>
           </div>
         </div>
@@ -491,8 +536,6 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
 
               {hubSplit.pages[hubPage] === "actions" && (
                 <>
-                  {trapMessage && <p className="trap-message">{trapMessage}</p>}
-
                   <h3 className="section-label section-label--actions">
                     <span className="section-label-icon">&#9656;</span>
                     What should Frosko do?
@@ -573,8 +616,6 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
                   </button>
                 ))}
               </div>
-
-              {trackerResult === "fail" && <p className="trap-message">{beat.failText}</p>}
 
               {trackerResult !== "success" && (
                 <div className="chapter-actions">

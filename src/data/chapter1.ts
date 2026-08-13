@@ -131,6 +131,7 @@ export function getPortraitBlink(portrait?: string): string | undefined {
 }
 
 export const FROSKO_PORTRAIT = "/images/characters/frosko.png";
+export const FROSKO_SAD_PORTRAIT = "/images/characters/frosko_sad.png";
 
 export const chapter1Beats: Record<SceneId, Beat> = {
   s_intro: {
