@@ -397,7 +397,7 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
           {"location" in beat && beat.location && <p className="chapter-play-location">{beat.location}</p>}
         </header>
 
-        <div className="chapter-play-panel">
+        <div className={`chapter-play-panel${npcPortrait ? " chapter-play-panel--has-npc" : ""}`}>
           {beat.type === "cutscene" && linePages && (
             <>
               <ScenePager

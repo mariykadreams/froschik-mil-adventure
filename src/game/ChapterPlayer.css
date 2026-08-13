@@ -93,8 +93,10 @@
 }
 
 @media (max-width: 760px) {
-  .npc-portrait-wrap {
-    display: none;
+  .npc-portrait {
+    height: 28vh;
+    max-width: 40vw;
+    opacity: 1;
   }
 }
 
@@ -356,12 +358,23 @@
   min-height: 0;
   overflow-y: auto;
   background: var(--parchment);
+  transition: padding 0.2s ease;
   padding: clamp(1.2rem, 3vw, 2.2rem);
   box-shadow:
     inset 4px 4px 0 rgba(255, 255, 255, 0.25),
     inset -4px -4px 0 rgba(0, 0, 0, 0.15),
     0 0 0 4px var(--wood-darkest),
     0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 760px) {
+  .chapter-play-panel {
+    padding-left: 24vw;
+  }
+
+  .chapter-play-panel--has-npc {
+    padding-right: 34vw;
+  }
 }
 
 /* Scene page navigation */
