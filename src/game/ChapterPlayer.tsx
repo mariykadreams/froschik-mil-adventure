@@ -2,8 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
 import { FROSKO_PORTRAIT, FROSKO_SAD_PORTRAIT, getPortraitBlink } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
-import VolumeIcon from "../components/VolumeIcon";
-import { playChapterMusic, stopChapterMusic, getMusicVolume, setMusicVolume } from "../audio/music";
+import { playChapterMusic, stopChapterMusic } from "../audio/music";
 import "./ChapterPlayer.css";
 
 type ChapterPlayerProps = {
@@ -162,24 +161,10 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   const [logOpen, setLogOpen] = useState(false);
   const logEntriesRef = useRef<HTMLDivElement>(null);
 
-  const [volumeOpen, setVolumeOpen] = useState(false);
-  const [volume, setVolume] = useState(getMusicVolume);
-  const volumeWrapRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     playChapterMusic();
     return () => stopChapterMusic();
   }, []);
-
-  useEffect(() => {
-    if (!volumeOpen) return;
-    const close = (e: MouseEvent) => {
-      if (volumeWrapRef.current?.contains(e.target as Node)) return;
-      setVolumeOpen(false);
-    };
-    document.addEventListener("click", close);
-    return () => document.removeEventListener("click", close);
-  }, [volumeOpen]);
 
   const beat = beats[currentId];
 
@@ -356,32 +341,6 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
       <button className="chapter-log-button" onClick={() => setLogOpen(true)} aria-label="View Frosko's journal">
         <JournalIcon />
       </button>
-
-      <div className="chapter-volume-wrap" ref={volumeWrapRef}>
-        <button
-          className="chapter-volume-button"
-          onClick={() => setVolumeOpen((open) => !open)}
-          aria-label="Music volume"
-        >
-          <VolumeIcon />
-        </button>
-        {volumeOpen && (
-          <div className="chapter-volume-popover" onClick={(e) => e.stopPropagation()}>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              value={volume}
-              onChange={(e) => {
-                const next = Number(e.target.value);
-                setVolume(next);
-                setMusicVolume(next);
-              }}
-              aria-label="Music volume slider"
-            />
-          </div>
-        )}
-      </div>
 
       {logOpen && (
         <div className="log-overlay" onClick={() => setLogOpen(false)}>
