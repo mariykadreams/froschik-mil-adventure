@@ -193,6 +193,63 @@
   height: auto;
 }
 
+.chapter-volume-wrap {
+  position: fixed;
+  top: 22px;
+  right: 82px;
+  z-index: 5;
+}
+
+.chapter-volume-button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wood-mid);
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    inset 3px 3px 0 var(--wood-light),
+    inset -3px -3px 0 var(--wood-darkest),
+    0 0 0 3px var(--wood-darkest),
+    0 4px 0 rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.08s steps(2),
+    background 0.08s steps(2);
+}
+
+.chapter-volume-button:hover {
+  background: var(--wood-light);
+  transform: translateY(-2px);
+}
+
+.chapter-volume-button:active {
+  transform: translateY(2px);
+}
+
+.chapter-volume-button svg {
+  width: 22px;
+  height: auto;
+}
+
+.chapter-volume-popover {
+  position: absolute;
+  top: 58px;
+  right: 0;
+  background: var(--parchment);
+  padding: 12px 14px;
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.4),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.25),
+    0 0 0 3px var(--wood-darkest),
+    0 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.chapter-volume-popover input[type="range"] {
+  width: 140px;
+}
+
 /* Journal / message log */
 
 .log-overlay {
