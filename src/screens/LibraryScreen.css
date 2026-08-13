@@ -28,7 +28,7 @@
 
 .library-title {
   font-family: var(--font-title);
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(3rem, 7vw, 4.6rem);
   color: var(--gold-bright);
   margin: 0;
   letter-spacing: 2px;
@@ -42,7 +42,7 @@
 
 .library-subtitle {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--parchment);
@@ -57,7 +57,7 @@
   justify-content: center;
   gap: 1.25rem;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1360px;
 }
 
 .carousel-arrow {
@@ -99,8 +99,8 @@
 .carousel-mask {
   overflow: hidden;
   width: 100%;
-  max-width: 940px;
-  height: 280px;
+  max-width: 1100px;
+  height: 340px;
   touch-action: pan-y;
   cursor: grab;
 }
@@ -113,7 +113,7 @@
   position: relative;
   left: 50%;
   display: flex;
-  gap: 40px;
+  gap: 48px;
   height: 100%;
   align-items: center;
   transition: transform 0.32s ease-out;
@@ -129,8 +129,8 @@
 .book-cover {
   position: relative;
   flex-shrink: 0;
-  width: 280px;
-  height: 200px;
+  width: 340px;
+  height: 260px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
@@ -242,14 +242,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 0 30px 0 36px;
+  gap: 12px;
+  padding: 0 34px 0 42px;
   text-align: center;
 }
 
 .book-cover-title {
   font-family: var(--font-title);
-  font-size: 1.35rem;
+  font-size: 1.7rem;
   line-height: 1.2;
   color: var(--gold-bright);
   letter-spacing: 0.5px;
@@ -272,7 +272,7 @@
 
 .book-cover-category {
   font-family: var(--font-ui);
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold);
@@ -284,8 +284,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 42px;
-  height: 42px;
+  width: 50px;
+  height: 50px;
   z-index: 3;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6));
 }
@@ -302,7 +302,7 @@
 
 .focused-book-title {
   font-family: var(--font-title);
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
   color: var(--gold-bright);
   margin: 0;
   text-shadow: 2px 2px 0 var(--wood-darkest);
@@ -310,7 +310,7 @@
 
 .focused-book-category {
   font-family: var(--font-ui);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--parchment);

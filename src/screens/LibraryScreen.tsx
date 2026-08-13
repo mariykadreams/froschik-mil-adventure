@@ -4,8 +4,8 @@ import type { Book } from "../data/library";
 import BookCoverCard from "../components/BookCoverCard";
 import "./LibraryScreen.css";
 
-const CARD_W = 280;
-const GAP = 40;
+const CARD_W = 340;
+const GAP = 48;
 const STEP = CARD_W + GAP;
 
 type LibraryScreenProps = {
