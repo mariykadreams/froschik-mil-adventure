@@ -328,10 +328,16 @@
 
 .chapter-play-title {
   font-family: var(--font-title);
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.35rem, 6vw, 3rem);
   color: var(--gold-bright);
   margin: 0;
   text-shadow: 2px 2px 0 var(--wood-darkest);
+}
+
+@media (max-width: 600px) {
+  .chapter-play-header {
+    padding: 0 58px;
+  }
 }
 
 .chapter-play-location {

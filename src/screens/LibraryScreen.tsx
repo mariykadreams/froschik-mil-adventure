@@ -4,9 +4,11 @@ import type { Book } from "../data/library";
 import BookCoverCard from "../components/BookCoverCard";
 import "./LibraryScreen.css";
 
-const CARD_W = 340;
-const GAP = 48;
-const STEP = CARD_W + GAP;
+const COMPACT_QUERY = "(max-width: 480px)";
+const CARD_SIZES = {
+  compact: { width: 230, gap: 22 },
+  full: { width: 340, gap: 48 },
+};
 
 type LibraryScreenProps = {
   onBack: () => void;
@@ -18,6 +20,19 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartX = useRef(0);
+  const [isCompact, setIsCompact] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(COMPACT_QUERY).matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(COMPACT_QUERY);
+    const onChange = () => setIsCompact(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  const { width: CARD_W, gap: GAP } = isCompact ? CARD_SIZES.compact : CARD_SIZES.full;
+  const STEP = CARD_W + GAP;
 
   const focusedBook = books[focusIndex];
 
@@ -59,7 +74,10 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
     <div className="library-screen">
       <div className="pixel-backdrop" />
 
-      <div className="library-content">
+      <div
+        className="library-content"
+        style={{ "--card-w": `${CARD_W}px`, "--card-gap": `${GAP}px` } as React.CSSProperties}
+      >
         <header className="library-header">
           <h1 className="library-title">The Shelf</h1>
           <p className="library-subtitle">Choose a tale to learn from</p>
