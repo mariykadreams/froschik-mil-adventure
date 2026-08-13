@@ -121,6 +121,16 @@ export default function LibraryScreen({ onBack, onChooseBook }: LibraryScreenPro
           <a href="https://crusenho.itch.io/complete-ui-book-styles-pack" target="_blank" rel="noreferrer">
             Crusenho
           </a>
+          {" · "}
+          Music: "Fairytale Waltz" by{" "}
+          <a href="https://incompetech.com" target="_blank" rel="noreferrer">
+            Kevin MacLeod
+          </a>{" "}
+          (
+          <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
+            CC BY 4.0
+          </a>
+          )
         </p>
       </div>
     </div>

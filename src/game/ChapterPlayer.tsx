@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Beat, DialogueLine, SceneId, TrackerCard } from "../data/chapter1";
 import { FROSKO_PORTRAIT, FROSKO_SAD_PORTRAIT, getPortraitBlink } from "../data/chapter1";
 import JournalIcon from "../components/JournalIcon";
+import { playChapterMusic, stopChapterMusic } from "../audio/music";
 import "./ChapterPlayer.css";
 
 type ChapterPlayerProps = {
@@ -159,6 +160,11 @@ export default function ChapterPlayer({ beats, startId, chapterTitle, onExit, on
   );
   const [logOpen, setLogOpen] = useState(false);
   const logEntriesRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    playChapterMusic();
+    return () => stopChapterMusic();
+  }, []);
 
   const beat = beats[currentId];
 

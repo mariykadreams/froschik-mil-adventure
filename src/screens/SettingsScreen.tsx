@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { getMusicVolume, setMusicVolume } from "../audio/music";
 import "./SettingsScreen.css";
 
 type SettingsScreenProps = {
@@ -5,6 +7,8 @@ type SettingsScreenProps = {
 };
 
 export default function SettingsScreen({ onBack }: SettingsScreenProps) {
+  const [volume, setVolume] = useState(getMusicVolume);
+
   return (
     <div className="settings-screen">
       <div className="settings-panel">
@@ -12,7 +16,18 @@ export default function SettingsScreen({ onBack }: SettingsScreenProps) {
 
         <div className="settings-row">
           <label htmlFor="volume">Music Volume</label>
-          <input id="volume" type="range" min={0} max={100} defaultValue={70} />
+          <input
+            id="volume"
+            type="range"
+            min={0}
+            max={100}
+            value={volume}
+            onChange={(e) => {
+              const next = Number(e.target.value);
+              setVolume(next);
+              setMusicVolume(next);
+            }}
+          />
         </div>
 
         <div className="settings-row">
