@@ -762,7 +762,7 @@
 .win-title {
   font-family: var(--font-title);
   font-size: clamp(2rem, 6vw, 2.6rem);
-  color: var(--gold-bright);
+  color: var(--gold);
   text-shadow: 2px 2px 0 var(--wood-darkest);
   margin: 0;
 }
